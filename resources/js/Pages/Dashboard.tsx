@@ -1,7 +1,17 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
 
-export default function Dashboard() {
+// type Game = {
+//     created_at: string;
+//     id: number;
+//     player_one_id: number;
+//     player_two_id?: number;
+//     player_three_id?: number;
+//     updated_at: string;
+// };
+const Dashboard = (props) => {
+    console.log(props);
+    const games = props.games.data;
     return (
         <AuthenticatedLayout
             header={
@@ -18,7 +28,7 @@ export default function Dashboard() {
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             Your Logged In
                         </div>
-                        <div className="p-6">
+                        <div className="px-6 pb-6">
                             <Link
                                 href={route('games.store')}
                                 method="post"
@@ -28,8 +38,25 @@ export default function Dashboard() {
                             </Link>
                         </div>
                     </div>
+                    <div className="mt-6 overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
+                        {games.map((game) => {
+                            return (
+                                <div
+                                    key={game.id}
+                                    className="p-6 text-gray-900 dark:text-gray-100"
+                                >
+                                    Player 1: {game.player_one_id}
+                                    Player 2: {game.player_two_id ??
+                                        'null'}{' '}
+                                    Player 3: {game.player_three_id ?? 'null'}
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
         </AuthenticatedLayout>
     );
-}
+};
+
+export default Dashboard;

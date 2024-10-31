@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\game;
+use App\Models\Game;
 use Illuminate\Auth\Access\Response;
 
 class GamePolicy
@@ -19,7 +19,7 @@ class GamePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, game $game): bool
+    public function view(User $user, Game $game): bool
     {
         //
     }
@@ -35,7 +35,7 @@ class GamePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, game $game): bool
+    public function update(User $user, Game $game): bool
     {
         //
     }
@@ -43,7 +43,7 @@ class GamePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, game $game): bool
+    public function delete(User $user, Game $game): bool
     {
         //
     }
@@ -51,7 +51,7 @@ class GamePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, game $game): bool
+    public function restore(User $user, Game $game): bool
     {
         //
     }
@@ -59,7 +59,7 @@ class GamePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, game $game): bool
+    public function forceDelete(User $user, Game $game): bool
     {
         //
     }

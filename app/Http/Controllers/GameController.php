@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\game;
+use App\Models\Game;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -10,9 +10,12 @@ class GameController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        return inertia('Dashboard',[
+            'games' => Game::with('playerOne')->whereNull('player_two_id')->oldest()->simplePaginate(5),
+        ]);
     }
 
     /**
@@ -30,23 +33,23 @@ class GameController extends Controller
     {
         $game = Game::create(['player_one_id' => $request->user()->id]);
 
-        return to_route('games.show', $game);    
+        return to_route('games.show', $game);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(game $game)
+    public function show(Game $game)
     {
-        return inertia("Games/Show");
-        // return Inertia::render('Auth/ConfirmPassword');
         //
+        return inertia("Games/Show");
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(game $game)
+    public function edit(Game $game)
     {
         //
     }
@@ -54,7 +57,7 @@ class GameController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, game $game)
+    public function update(Request $request, Game $game)
     {
         //
     }
@@ -62,7 +65,7 @@ class GameController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(game $game)
+    public function destroy(Game $game)
     {
         //
     }
