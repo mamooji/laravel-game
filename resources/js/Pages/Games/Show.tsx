@@ -15,6 +15,7 @@ export function Show(props) {
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-black dark:text-white">
                             Testing
+                            {JSON.stringify(props.game, '0', undefined)}
                         </div>
                     </div>
                 </div>

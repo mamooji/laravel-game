@@ -32,6 +32,13 @@ class GamePolicy
         //
     }
 
+    public function join(User $user, Game $game): bool
+    {
+//        return ($game->player_one_id || $game->player_two_id || game->player_three_id) !== $user->id && $game->player_two_id === null ;
+        return $game->player_one_id !== $user->id && $game->player_two_id === null ;
+        //
+    }
+
     /**
      * Determine whether the user can update the model.
      */

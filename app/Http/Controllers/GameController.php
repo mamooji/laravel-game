@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class GameController extends Controller
 {
@@ -12,9 +13,12 @@ class GameController extends Controller
      */
     public function index(Request $request)
     {
-        //
-        return inertia('Dashboard',[
-            'games' => Game::with('playerOne')->whereNull('player_two_id')->oldest()->simplePaginate(5),
+        return inertia('Dashboard', [
+                'games' => Game::with(['playerOne', 'playerTwo', 'playerThree'])
+                ->where('player_one_id', '!=', $request->user()->id)
+                ->orWhereAny(['player_two_id', 'player_three_id'] ,'==',null)
+                ->oldest()
+                ->simplePaginate(100)
         ]);
     }
 
@@ -36,13 +40,26 @@ class GameController extends Controller
         return to_route('games.show', $game);
     }
 
+    public function join(Request $request, Game $game)
+    {
+        Gate::authorize('join', $game);
+
+        if($game->player_two_id == null){
+            $game->update(['player_two_id' => $request->user()->id]);
+        }else{
+            $game->update(['player_three_id' => $request->user()->id]);
+        }
+        return to_route('games.show', $game);
+
+    }
+
     /**
      * Display the specified resource.
      */
     public function show(Game $game)
     {
         //
-        return inertia("Games/Show");
+        return inertia("Games/Show", compact("game"));
 
     }
 
