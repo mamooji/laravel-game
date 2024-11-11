@@ -1,7 +1,10 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 export function Show(props) {
     console.log(props);
+
     return (
         <AuthenticatedLayout
             header={
@@ -15,6 +18,8 @@ export function Show(props) {
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-black dark:text-white">
                             Testing
+                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                            {/*// @ts-expect-error*/}
                             {JSON.stringify(props.game, '0', undefined)}
                         </div>
                     </div>
