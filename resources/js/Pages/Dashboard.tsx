@@ -1,47 +1,26 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link, usePage } from '@inertiajs/react';
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
-import { useEffect, useRef } from 'react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
+import Echo from '../echoTypescript';
 
-const Dashboard = (props: unknown) => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const games = props.games.data;
+const Dashboard = (props: any) => {
+    console.log(props);
+    const [games, setGames] = useState([...props.games.data]);
     const user = usePage().props.auth.user;
 
-    const gamesRef = useRef(games);
     useEffect(() => {
-        const push = Pusher;
-        console.log(push);
-        const test = new Echo({
-            broadcaster: 'reverb',
-            key: import.meta.env.VITE_REVERB_APP_KEY,
-            wsHost: import.meta.env.VITE_REVERB_HOST,
-            wsPort: import.meta.env.VITE_REVERB_PORT ?? 80,
-            wssPort: import.meta.env.VITE_REVERB_PORT ?? 443,
-            forceTLS:
-                (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
-            enabledTransports: ['ws', 'wss'],
-        });
-        test.private('lobby').listen('GameJoined', (event) => {
+        Echo.private('lobby').listen('GameJoined', (event: any) => {
             const gameId = event.game.id;
-            const playerOneId = event.game.player_one_id;
             const playerTwoId = event.game.player_two_id;
             const playerThreeId = event.game.player_three_id;
             const isGameFull: boolean =
-                playerOneId !== null &&
-                playerTwoId !== null &&
-                playerThreeId !== null;
-            gamesRef.current = gamesRef.current.filter(
-                (game) => game.id == gameId && isGameFull,
-            );
-            console.log(event, gameId, isGameFull);
+                playerTwoId !== null && playerThreeId !== null;
+            if (isGameFull) {
+                setGames(games.filter((game) => game.id !== gameId));
+            }
+            router.reload({ only: ['games'] });
         });
-    });
-    useEffect(() => {
-        console.log(gamesRef);
-    }, [gamesRef.current]);
+    }, [games]);
 
     return (
         <AuthenticatedLayout
@@ -69,7 +48,7 @@ const Dashboard = (props: unknown) => {
                         </Link>
                     </div>
 
-                    {gamesRef.current.map((game: any) => {
+                    {games.map((game: any) => {
                         return (
                             <div
                                 key={game.id}

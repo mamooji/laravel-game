@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\GameJoined;
 use App\Models\Game;
+//use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -17,7 +19,10 @@ class GameController extends Controller
         return inertia('Dashboard', [
                 'games' => Game::with(['playerOne', 'playerTwo', 'playerThree'])
                 ->where('player_one_id', '!=', $request->user()->id)
-                ->orWhereAny(['player_two_id', 'player_three_id'] ,'==',null)
+                ->where(function (Builder $query){
+                    $query->whereNull('player_two_id')
+                        ->orWhereNull('player_three_id');
+                })
                 ->oldest()
                 ->simplePaginate(100)
         ]);
