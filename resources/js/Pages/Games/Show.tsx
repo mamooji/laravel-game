@@ -1,11 +1,21 @@
+import Echo from '@/echoTypescript';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { usePage } from '@inertiajs/react';
+import { PageProps } from '@/types';
+import { router } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-export function Show(props) {
-    const game = usePage().props.game;
-
+export function Show(props: PageProps) {
+    const [game, setGame] = useState(props.game);
+    useEffect(() => {
+        Echo.private('lobby').listen('GameJoined', (event: any) => {
+            router.reload({
+                only: ['game'],
+            });
+        });
+    }, [game]);
+    useEffect(() => {
+        setGame(props.game);
+    }, [props.game]);
     return (
         <AuthenticatedLayout
             header={
@@ -21,13 +31,13 @@ export function Show(props) {
                             GAME ID: {game.id}
                         </div>
                         <div className="p-6 text-black dark:text-white">
-                            player 1: {game.player_one_id}
+                            player 1: {game.player_one?.name}
                         </div>
                         <div className="p-6 text-black dark:text-white">
-                            player 2: {game?.player_two_id ?? 'empty'}
+                            player 2: {game?.player_two?.name ?? 'empty'}
                         </div>
                         <div className="p-6 text-black dark:text-white">
-                            player 3: {game?.player_three_id ?? 'empty'}
+                            player 3: {game?.player_three?.name ?? 'empty'}
                         </div>
                         <div className="p-6 text-black dark:text-white">
                             {JSON.stringify(props.game, '0', undefined)}

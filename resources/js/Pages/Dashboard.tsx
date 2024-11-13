@@ -1,12 +1,14 @@
+import Echo from '@/echoTypescript';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { PageProps } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
-import Echo from '../echoTypescript';
 
-const Dashboard = (props: any) => {
-    const [games, setGames] = useState([...props.games.data]);
+const Dashboard = (props: PageProps) => {
+    const [games, setGames] = useState([...props.games]);
     const user = usePage().props.auth.user;
-
+    console.log(usePage().props);
+    //
     useEffect(() => {
         Echo.private('lobby').listen('GameJoined', (event: any) => {
             // const gameId = event.game.id;
@@ -22,10 +24,10 @@ const Dashboard = (props: any) => {
             });
         });
     }, [games]);
-
+    //
     useEffect(() => {
-        setGames([...props.games.data]);
-    }, [props.games.data]);
+        setGames([...props.games]);
+    }, [props.games]);
 
     return (
         <AuthenticatedLayout

@@ -24,7 +24,7 @@ class GameController extends Controller
                         ->orWhereNull('player_three_id');
                 })
                 ->oldest()
-                ->simplePaginate(100)
+                ->get()
         ]);
     }
 
@@ -60,6 +60,7 @@ class GameController extends Controller
 
         GameJoined::dispatch($game);
         return to_route('games.show', $game);
+//        return to_route('games.show', ["game" => Game::with(['playerOne', 'playerTwo', 'playerThree'])]);
 
     }
 
@@ -69,6 +70,7 @@ class GameController extends Controller
     public function show(Game $game)
     {
         //
+        $game->load(['playerOne', 'playerTwo', 'playerThree']);
         return inertia("Games/Show", compact("game"));
 
     }
