@@ -60,7 +60,6 @@ class GameController extends Controller
 
         GameJoined::dispatch($game);
         return to_route('games.show', $game);
-//        return to_route('games.show', ["game" => Game::with(['playerOne', 'playerTwo', 'playerThree'])]);
 
     }
 
