@@ -4,23 +4,28 @@ import { useEffect, useState } from 'react';
 import Echo from '../echoTypescript';
 
 const Dashboard = (props: any) => {
-    console.log(props);
     const [games, setGames] = useState([...props.games.data]);
     const user = usePage().props.auth.user;
 
     useEffect(() => {
         Echo.private('lobby').listen('GameJoined', (event: any) => {
-            const gameId = event.game.id;
-            const playerTwoId = event.game.player_two_id;
-            const playerThreeId = event.game.player_three_id;
-            const isGameFull: boolean =
-                playerTwoId !== null && playerThreeId !== null;
-            if (isGameFull) {
-                setGames(games.filter((game) => game.id !== gameId));
-            }
-            router.reload({ only: ['games'] });
+            // const gameId = event.game.id;
+            // const playerTwoId = event.game.player_two_id;
+            // const playerThreeId = event.game.player_three_id;
+            // const isGameFull: boolean =
+            //     playerTwoId !== null && playerThreeId !== null;
+            // if (isGameFull) {
+            //     setGames(games.filter((game) => game.id !== gameId));
+            // }
+            router.reload({
+                only: ['games'],
+            });
         });
     }, [games]);
+
+    useEffect(() => {
+        setGames([...props.games.data]);
+    }, [props.games.data]);
 
     return (
         <AuthenticatedLayout
