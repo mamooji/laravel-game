@@ -6,6 +6,12 @@ export interface User {
     email: string;
     email_verified_at?: string;
 }
+export interface Game {
+    id: number;
+    player_one_id: number;
+    player_two_id?: number;
+    player_three_id?: number;
+}
 
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
@@ -13,5 +19,6 @@ export type PageProps<
     auth: {
         user: User;
     };
+    game: Game;
     ziggy: Config & { location: string };
 };

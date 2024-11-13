@@ -43,6 +43,8 @@ class GameController extends Controller
     {
         $game = Game::create(['player_one_id' => $request->user()->id]);
 
+        GameJoined::dispatch($game);
+
         return to_route('games.show', $game);
     }
 
