@@ -1,33 +1,22 @@
 import Echo from '@/echoTypescript';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { PageProps } from '@/types';
+import { Game, PageProps } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-const Dashboard = (props: PageProps) => {
-    const [games, setGames] = useState([...props.games]);
-    const user = usePage().props.auth.user;
-    console.log(usePage().props);
-    //
+const Dashboard = () => {
+    const { games } = usePage<{ games: Game[] }>().props;
+    const { auth } = usePage<PageProps>().props;
+
+    const { user } = auth;
     useEffect(() => {
-        Echo.private('lobby').listen('GameJoined', (event: any) => {
-            // const gameId = event.game.id;
-            // const playerTwoId = event.game.player_two_id;
-            // const playerThreeId = event.game.player_three_id;
-            // const isGameFull: boolean =
-            //     playerTwoId !== null && playerThreeId !== null;
-            // if (isGameFull) {
-            //     setGames(games.filter((game) => game.id !== gameId));
-            // }
+        Echo.private('lobby').listen('GameJoined', () => {
+            console.log('game joined');
             router.reload({
                 only: ['games'],
             });
         });
     }, [games]);
-    //
-    useEffect(() => {
-        setGames([...props.games]);
-    }, [props.games]);
 
     return (
         <AuthenticatedLayout

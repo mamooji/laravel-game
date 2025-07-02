@@ -7,12 +7,13 @@ import { useEffect, useState } from 'react';
 export function Show(props: PageProps) {
     const [game, setGame] = useState(props.game);
     useEffect(() => {
-        Echo.private('lobby').listen('GameJoined', (event: any) => {
+        Echo.private('lobby').listen('GameJoined', () => {
             router.reload({
                 only: ['game'],
             });
         });
     }, [game]);
+
     useEffect(() => {
         setGame(props.game);
     }, [props.game]);
@@ -40,7 +41,7 @@ export function Show(props: PageProps) {
                             player 3: {game?.player_three?.name ?? 'empty'}
                         </div>
                         <div className="p-6 text-black dark:text-white">
-                            {JSON.stringify(props.game, '0', undefined)}
+                            {/*{JSON.stringify(props.game, '0', undefined)}*/}
                         </div>
                     </div>
                 </div>

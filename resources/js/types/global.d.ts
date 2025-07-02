@@ -24,3 +24,6 @@ declare global {
         Echo: Echo;
     }
 }
+declare module '@inertiajs/react' {
+    export declare function usePage<T>(): Page<T>;
+}
